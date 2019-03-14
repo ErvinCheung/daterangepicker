@@ -55,6 +55,8 @@
         this.autoUpdateInput = true;
         this.alwaysShowCalendars = false;
         this.ranges = {};
+        // todo configuration
+        this.pickerWidth = 485;
 
         this.opens = 'right';
         if (this.element.hasClass('pull-right'))
@@ -1015,7 +1017,41 @@
 
         },
 
+        autoOpens: function() {
+            if (this.isAllowRight()) {
+                this.opens = 'right';
+            } else if (this.isAllowLeft()) {
+                this.opens = 'left';
+            } else {
+                this.opens = 'center';
+            }
+            // 上方箭头
+            this.container.removeClass('opensright')
+                .removeClass('opensleft')
+                .removeClass('openscenter')
+                .addClass('opens' + this.opens);
+        },
+
+        isAllowLeft: function () {
+            let input_width = this.element[0].clientWidth;
+            return this.inputRelativeParentElLeftOffset() + input_width > this.pickerWidth;
+        },
+
+        isAllowRight: function () {
+            return this.inputRelativeParentElLeftOffset() + this.pickerWidth < this.parentElWidth()
+        },
+
+        parentElWidth: function () {
+            return this.parentEl[0].clientWidth;
+        },
+
+        inputRelativeParentElLeftOffset: function () {
+            // input left offset - parentEl left offset
+            return this.element.offset().left - this.parentEl.offset().left;
+        },
+
         move: function() {
+            this.autoOpens();
             var parentOffset = { top: 0, left: 0 },
                 containerTop;
             var parentRightEdge = $(window).width();
