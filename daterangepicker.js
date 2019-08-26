@@ -1036,17 +1036,26 @@
           .addClass('opens' + this.opens);
     },
 
+    setPickerWidth: function () {
+      let pickerWidth = this.container[0].getBoundingClientRect().width;
+      if (pickerWidth > this.pickerWidth) {
+        this.pickerWidth = pickerWidth;
+      }
+    },
+
     isAllowLeft: function () {
-      let input_width = this.element[0].clientWidth;
+      this.setPickerWidth();
+      let input_width = this.element[0].getBoundingClientRect().width;
       return this.inputRelativeParentElLeftOffset() + input_width > this.pickerWidth;
     },
 
     isAllowRight: function () {
+      this.setPickerWidth();
       return this.inputRelativeParentElLeftOffset() + this.pickerWidth < this.parentElWidth()
     },
 
     parentElWidth: function () {
-      return this.parentEl[0].clientWidth;
+      return this.parentEl[0].getBoundingClientRect().width;
     },
 
     inputRelativeParentElLeftOffset: function () {
